@@ -6,8 +6,8 @@ public class Usuarios {
     protected String nome;
     protected String senha;
 
-    public Usuarios(int id, String nome, String senha) {
-        this.id = id;
+    public Usuarios(String nome, String senha) {
+        this.id = 0;
         this.nome = nome;
         this.senha = senha;
     }
@@ -31,8 +31,7 @@ public class Usuarios {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-    
-    
+     
     public void cadastrar(){
         
         

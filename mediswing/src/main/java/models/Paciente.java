@@ -7,10 +7,8 @@ public class Paciente extends Usuarios {
     private String endereco;
     private String telefone;
 
-    public Paciente(int id, String nome, String senha,
-                    String cpf, String dataNascimento,
-                    String endereco, String telefone) {
-        super(id, nome, senha);
+    public Paciente(String nome, String senha,String cpf, String dataNascimento,String endereco, String telefone) {
+        super(nome, senha);
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.endereco = endereco;

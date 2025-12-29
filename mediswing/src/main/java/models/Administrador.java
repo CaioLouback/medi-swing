@@ -5,8 +5,8 @@ public class Administrador extends Usuarios {
 
     private int nivelAcesso;
 
-    public Administrador(int id, String nome, String senha, int nivelAcesso) {
-        super(id, nome, senha);
+    public Administrador(String nome, String senha, int nivelAcesso) {
+        super(nome, senha);
         this.nivelAcesso = nivelAcesso;
     }
 
