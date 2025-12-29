@@ -31,4 +31,11 @@ public class Usuarios {
     public void setSenha(String senha) {
         this.senha = senha;
     }
+    
+    
+    public void cadastrar(){
+        
+        
+    }
+    
 }
