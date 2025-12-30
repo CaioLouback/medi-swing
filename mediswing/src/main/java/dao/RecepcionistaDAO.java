@@ -2,10 +2,13 @@ package dao;
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -49,6 +52,51 @@ public class RecepcionistaDAO {
 
         return false;
     }
+    public static List<String> listarRecepcionistas() {
+
+        List<String> lista = new ArrayList<>();
+        Gson gson = new Gson();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("recepcionistas.json"))) {
+            String linha;
+
+            while ((linha = reader.readLine()) != null) {
+                lista.add(linha);
+            }
+        } catch (IOException e) {
+        }
+
+        return lista;
+    }
     
     
+    public static void deletarRecepcionista(String cpf) {
+
+        File arquivo = new File("recepcionistas.json");
+        List<String> linhasRestantes = new ArrayList<>();
+        Gson gson = new Gson();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+
+            while ((linha = reader.readLine()) != null) {
+                Map<?, ?> recep = gson.fromJson(linha, Map.class);
+                if (!recep.get("cpf").equals(cpf)) {
+                    linhasRestantes.add(linha);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try (FileWriter writer = new FileWriter(arquivo, false)) {
+            for (String l : linhasRestantes) {
+                writer.write(l);
+                writer.write(System.lineSeparator());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

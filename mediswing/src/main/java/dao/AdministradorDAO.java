@@ -5,7 +5,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AdministradorDAO {
@@ -51,6 +53,57 @@ public class AdministradorDAO {
 
         return false;
     }
+    
+    public static List<Object[]> listarUsuariosTabela() {
+
+        List<Object[]> dados = new ArrayList<>();
+        Gson gson = new Gson();
+
+        // MÉDICOS
+        try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Map<String, String> m = gson.fromJson(linha, Map.class);
+                dados.add(new Object[]{
+                    m.getOrDefault("nome", "-"),
+                    m.getOrDefault("cpf", "-"),
+                    "Médico"
+                });
+            }
+        } catch (IOException e) {
+        }
+
+        // RECEPCIONISTAS
+        try (BufferedReader reader = new BufferedReader(new FileReader("recepcionistas.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Map<String, String> r = gson.fromJson(linha, Map.class);
+                dados.add(new Object[]{
+                    r.getOrDefault("nome", "-"),
+                    r.getOrDefault("cpf", "-"),
+                    "Recepcionista"
+                });
+            }
+        } catch (IOException e) {
+        }
+
+        // PACIENTES
+        try (BufferedReader reader = new BufferedReader(new FileReader("pacientes.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Map<String, String> p = gson.fromJson(linha, Map.class);
+                dados.add(new Object[]{
+                    p.getOrDefault("nome", "-"),
+                    p.getOrDefault("cpf", "-"),
+                    "Paciente"
+                });
+            }
+        } catch (IOException e) {
+        }
+
+        return dados;
+    }
+    
     
     
     

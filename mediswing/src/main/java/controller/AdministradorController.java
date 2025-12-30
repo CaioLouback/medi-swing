@@ -2,9 +2,16 @@ package controller;
 
 import static dao.AdministradorDAO.cadastrarAdministradorJson;
 import static dao.MedicoDAO.cadastrarMedicoJson;
+import static dao.MedicoDAO.deletarMedico;
+import static dao.MedicoDAO.listarMedicos;
 import static dao.PacienteDAO.cadastrarPacienteJson;
+import static dao.PacienteDAO.deletarPaciente;
+import static dao.PacienteDAO.listarPacientes;
 import static dao.RecepcionistaDAO.cadastrarRecepcionistaJson;
+import static dao.RecepcionistaDAO.deletarRecepcionista;
+import static dao.RecepcionistaDAO.listarRecepcionistas;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import view.CadastroMedico;
 import view.CadastroPaciente;
 import view.CadastroRecepcionista;
@@ -98,6 +105,8 @@ public class AdministradorController {
         return texto.matches(".*\\d.*");
     }
     
-
+    
+    
+    
     
 }
