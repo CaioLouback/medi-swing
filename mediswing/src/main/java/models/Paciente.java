@@ -1,14 +1,15 @@
 package models;
 
 
-public class Paciente extends Usuarios {
+public class Paciente {
+    private String nome;
     private String cpf;
     private String dataNascimento;
     private String endereco;
     private String telefone;
 
-    public Paciente(String nome, String senha,String cpf, String dataNascimento,String endereco, String telefone) {
-        super(nome, senha);
+    public Paciente(String nome,String cpf, String dataNascimento,String endereco, String telefone) {
+        this.nome = nome;
         this.cpf = cpf;
         this.dataNascimento = dataNascimento;
         this.endereco = endereco;

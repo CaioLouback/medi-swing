@@ -6,12 +6,12 @@ public class Medico extends Usuarios {
     protected String especialidade;
  
     public Medico(String nome,String crm,String especialidade,String cpf,String senha) {
-        super(nome, senha);
+        super(nome,cpf, senha);
         this.crm = crm;
         this.especialidade = especialidade;
     }
 
-    public String getCrm() {
+    public String getCRM() {
         return crm;
     }
 
