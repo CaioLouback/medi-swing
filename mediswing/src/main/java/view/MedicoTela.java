@@ -29,6 +29,7 @@ public class MedicoTela extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Menu Inicial: Médico");
 
         jLabel1.setText("medico tela");
 
@@ -37,7 +38,7 @@ public class MedicoTela extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(202, Short.MAX_VALUE)
+                .addContainerGap(796, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(136, 136, 136))
         );
@@ -46,7 +47,7 @@ public class MedicoTela extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addComponent(jLabel1)
-                .addContainerGap(235, Short.MAX_VALUE))
+                .addContainerGap(453, Short.MAX_VALUE))
         );
 
         pack();
