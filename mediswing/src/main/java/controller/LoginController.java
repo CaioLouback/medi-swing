@@ -4,6 +4,7 @@ import static dao.AdministradorDAO.loginAdministrador;
 import static dao.MedicoDAO.loginMedico;
 import static dao.RecepcionistaDAO.loginRecepcionista;
 import javax.swing.JOptionPane;
+import models.Usuarios;
 import view.AdministradorTela;
 import view.MedicoTela;
 import view.RecepcionistaTela;
@@ -19,30 +20,29 @@ public class LoginController {
             boolean adm = loginAdministrador(cpf, senha);
             if(med == false && recep == false && adm == false){
                 JOptionPane.showMessageDialog(janela,"CPF ou senha incorretos!","Atenção!",JOptionPane.WARNING_MESSAGE);
-            } else if(med) {
-                janela.dispose();
-                MedicoTela tela = new MedicoTela();
-                tela.setLocationRelativeTo(null);
-                tela.setVisible(true);
-                return;
-            } else if (recep){
-                janela.dispose();
-                RecepcionistaTela tela = new RecepcionistaTela();
-                tela.setLocationRelativeTo(null);
-                tela.setVisible(true);
-                return;
-            }else if(adm){
-                janela.dispose();
-                AdministradorTela tela = new AdministradorTela();
-                tela.setLocationRelativeTo(null);
-                tela.setVisible(true);
-                return;
+            } else {
+                if (med == true ) {
+                    janela.dispose();
+                    MedicoTela tela = new MedicoTela();
+                    tela.setLocationRelativeTo(null);
+                    tela.setVisible(true);
+                    return;
+                } else if (recep == true ) {
+                    janela.dispose();
+
+                    RecepcionistaTela tela = new RecepcionistaTela();
+                    tela.setLocationRelativeTo(null);
+                    tela.setVisible(true);
+                    return;
+                } else if (adm == true) {
+                    janela.dispose();
+                    AdministradorTela tela = new AdministradorTela();
+                    tela.setLocationRelativeTo(null);
+                    tela.setVisible(true);
+                    return;
+                } 
             }
-            
         }
-    
     }
-    
-    
-    
+ 
 }

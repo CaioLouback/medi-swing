@@ -59,15 +59,17 @@ public class AdministradorController {
         } else {
             if (temNumero(nome)) {
                 JOptionPane.showMessageDialog(dialog,"O nome não pode conter números!","Aviso",JOptionPane.WARNING_MESSAGE);
-            } 
-            if(temNumero(especialidade)){
-                JOptionPane.showMessageDialog(dialog,"A especialidade não pode conter números!","Aviso",JOptionPane.WARNING_MESSAGE);
-            } 
-            if(senha.equals(senha2)){
-                cadastrarMedicoJson(nome, crm, especialidade, cpf, senha);
-                JOptionPane.showMessageDialog(dialog,"Cadastro realizado com sucesso! ","Sucesso!",JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(dialog,"Confirme a sua senha corretamente! ","Aviso",JOptionPane.WARNING_MESSAGE);
+            }else{
+                if(temNumero(especialidade)){
+                    JOptionPane.showMessageDialog(dialog,"A especialidade não pode conter números!","Aviso",JOptionPane.WARNING_MESSAGE);
+                } else{
+                    if(senha.equals(senha2)){
+                        cadastrarMedicoJson(nome, crm, especialidade, cpf, senha);
+                        JOptionPane.showMessageDialog(dialog,"Cadastro realizado com sucesso! ","Sucesso!",JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(dialog,"Confirme a sua senha corretamente! ","Aviso",JOptionPane.WARNING_MESSAGE);
+                    }
+                }   
             }
         }
     }
@@ -78,12 +80,13 @@ public class AdministradorController {
         } else {
             if (temNumero(nome)) {
                 JOptionPane.showMessageDialog(dialog,"O nome não pode conter números!","Aviso",JOptionPane.WARNING_MESSAGE);
-            } 
-            if(senha.equals(senha2)){
-                cadastrarRecepcionistaJson(nome, cpf, senha);
-                JOptionPane.showMessageDialog(dialog,"Cadastro realizado com sucesso! ","Sucesso!",JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(dialog,"Confirme a sua senha corretamente! ","Aviso",JOptionPane.WARNING_MESSAGE);
+            }else {
+                if(senha.equals(senha2)){
+                    cadastrarRecepcionistaJson(nome, cpf, senha);
+                    JOptionPane.showMessageDialog(dialog,"Cadastro realizado com sucesso! ","Sucesso!",JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(dialog,"Confirme a sua senha corretamente! ","Aviso",JOptionPane.WARNING_MESSAGE);
+                }
             }
         }
     }
@@ -94,9 +97,10 @@ public class AdministradorController {
         } else {
             if (temNumero(nome)){
                 JOptionPane.showMessageDialog(dialog,"O nome não pode conter números!","Aviso",JOptionPane.WARNING_MESSAGE);
-            }
-            cadastrarPacienteJson(nome, cpf, nascimento, endereco, telefone);
-            JOptionPane.showMessageDialog(dialog,"Cadastro realizado com sucesso! ","Sucesso!",JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                cadastrarPacienteJson(nome, cpf, nascimento, endereco, telefone);
+                JOptionPane.showMessageDialog(dialog,"Cadastro realizado com sucesso! ","Sucesso!",JOptionPane.INFORMATION_MESSAGE);
+            }  
         }
     }
     
