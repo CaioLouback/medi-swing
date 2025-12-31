@@ -1,13 +1,13 @@
-
 package view;
 
+import static controller.ConsultaController.limparTabelaAgenda;
+import static controller.ConsultaController.preencherTabelaAgenda;
+import static controller.ConsultaController.validarAgendamento;
+import static controller.ConsultaController.validarCancelamento;
 import static controller.RecepController.carregarComboMedicos;
 import static controller.RecepController.carregarComboPacientes;
 import java.util.List;
-import javax.swing.JOptionPane;
 import models.Consulta;
-import static models.Consulta.deletarConsultaJson;
-import static models.Consulta.salvarConsultaJson;
 import static models.Medico.carregarAgendaDoMedico;
 
 /**
@@ -27,53 +27,6 @@ public class AgendarConsulta extends javax.swing.JDialog {
         String valor = cbMedico.getSelectedItem().toString();
         carregarAgendaDoMedico(valor);
     }
-    private void preencherTabelaAgenda(List<Consulta> consultas) {
-
-        for (Consulta c : consultas) {
-
-            String dia = c.getDia();
-            String hora = c.getHora();
-            String paciente = c.getPaciente();
-
-            int colunaDia = -1;
-            for (int j = 0; j < tabelaConsultas.getColumnCount(); j++) {
-                if (tabelaConsultas.getColumnName(j).equalsIgnoreCase(dia)) {
-                    colunaDia = j;
-                    break;
-                }
-            }
-
-            int linhaHora = -1;
-            for (int i = 0; i < HORAS.length; i++) {
-                if (HORAS[i].equals(hora)) {
-                    linhaHora = i;
-                    break;
-                }
-            }
-
-            if (linhaHora != -1 && colunaDia != -1) {
-                tabelaConsultas.setValueAt(paciente, linhaHora, colunaDia);
-            }
-        }
-    }
-    
-    private void limparTabelaAgenda() {
-        for (int i = 0; i < tabelaConsultas.getRowCount(); i++) {
-            for (int j = 0; j < tabelaConsultas.getColumnCount(); j++) {
-                tabelaConsultas.setValueAt("-", i, j);
-            }
-        }
-    }
-
-    private final String[] HORAS = {
-        "08:00", "09:00", "10:00", "11:00", "12:00",
-        "13:00", "14:00", "15:00", "16:00", "17:00"
-    };
-
-    
-    
-   
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -264,115 +217,21 @@ public class AgendarConsulta extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgendarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendarConsultaActionPerformed
-        int linha = tabelaConsultas.getSelectedRow();
-        int coluna = tabelaConsultas.getSelectedColumn();
-
-        if (linha == -1 || coluna == -1) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Selecione um horário na tabela!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-
-        String paciente = cbPaciente.getSelectedItem().toString();
-        String medico = cbMedico.getSelectedItem().toString();
-        if (paciente == null || paciente.isEmpty()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Selecione um paciente!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-
-        Object valorAtual = tabelaConsultas.getValueAt(linha, coluna);
-
-        if (valorAtual != null && !valorAtual.toString().equals("-")) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Esse horário já está ocupado!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-        
-        tabelaConsultas.setValueAt(paciente, linha, coluna);
-        String dia = tabelaConsultas.getColumnName(coluna);
-        String hora = HORAS[linha];
-
-        salvarConsultaJson(medico, dia, hora, paciente);
+       validarAgendamento(tabelaConsultas, this, cbPaciente, cbMedico);
     }//GEN-LAST:event_btnAgendarConsultaActionPerformed
 
     private void btnCancelarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarConsultaActionPerformed
-        int linha = tabelaConsultas.getSelectedRow();
-        int coluna = tabelaConsultas.getSelectedColumn();
-
-        if (linha == -1 || coluna == -1) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Selecione um horário na tabela!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-
-        Object valorAtual = tabelaConsultas.getValueAt(linha, coluna);
-
-        if (valorAtual == null || valorAtual.toString().equals("-")) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    "Esse horário já está livre!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
-            return;
-        }
-
-        int opcao = JOptionPane.showConfirmDialog(
-                this,
-                "Deseja cancelar a consulta?",
-                "Confirmação",
-                JOptionPane.YES_NO_OPTION
-        );
-
-        if (opcao == JOptionPane.YES_OPTION) {
-            
-            String medico = cbMedico.getSelectedItem().toString();
-            String paciente = tabelaConsultas.getValueAt(linha, coluna).toString();
-
-            String dia = tabelaConsultas.getColumnName(coluna);
-
-            String[] horas = {
-                "08:00", "09:00", "10:00", "11:00", "12:00",
-                "13:00", "14:00", "15:00", "16:00", "17:00"
-            };
-            String hora = horas[linha];
-
-            deletarConsultaJson(medico, dia, hora, paciente);
-
-            tabelaConsultas.setValueAt("-", linha, coluna);
-        }
+        validarCancelamento(tabelaConsultas, this, cbMedico);
     }//GEN-LAST:event_btnCancelarConsultaActionPerformed
 
     private void cbMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMedicoActionPerformed
-        
-        if (cbMedico.getSelectedItem() == null) {
+         if (cbMedico.getSelectedItem() == null) {
             return;
         }
-
         String nomeMedico = cbMedico.getSelectedItem().toString();
-
-        limparTabelaAgenda();
-
+        limparTabelaAgenda(tabelaConsultas);
         List<Consulta> consultas = carregarAgendaDoMedico(nomeMedico);
-
-        preencherTabelaAgenda(consultas);
+        preencherTabelaAgenda(tabelaConsultas, consultas);
 
     }//GEN-LAST:event_cbMedicoActionPerformed
 

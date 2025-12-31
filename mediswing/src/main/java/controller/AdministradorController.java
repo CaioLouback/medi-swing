@@ -1,9 +1,19 @@
 package controller;
 
+import com.google.gson.Gson;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 import static models.Medico.cadastrarMedicoJson;
 import static models.Paciente.cadastrarPacienteJson;
 import static models.Recepcionista.cadastrarRecepcionistaJson;
+import static models.Usuarios.deletarUsuario;
 import view.CadastroMedico;
 import view.CadastroPaciente;
 import view.CadastroRecepcionista;
@@ -97,11 +107,68 @@ public class AdministradorController {
     }
     
     
-    public static boolean temNumero(String texto) {
+    private static boolean temNumero(String texto) {
         return texto.matches(".*\\d.*");
     }
     
+    public static void validarExclusao(JTable tabelaUsuarios, javax.swing.JDialog dialog){
+            int linhaSelecionada = tabelaUsuarios.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                JOptionPane.showMessageDialog(dialog,"Selecione um usuário na tabela!","Aviso",JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            String nome = tabelaUsuarios.getValueAt(linhaSelecionada, 0).toString();
+            String cpf = tabelaUsuarios.getValueAt(linhaSelecionada, 1).toString();
+            String tipo = tabelaUsuarios.getValueAt(linhaSelecionada, 2).toString();
+            
+            int opcao = JOptionPane.showConfirmDialog( dialog,"Deseja realmente excluir o usuário:\n" + nome,"Confirmação",JOptionPane.YES_NO_OPTION);
+            if (opcao == JOptionPane.YES_OPTION) {
+                deletarUsuario(cpf, tipo);
+                atualizarTabela(tabelaUsuarios);
+            }
+    }
     
+    private static void atualizarTabela(JTable tabelaUsuarios) {
+        DefaultTableModel model = (DefaultTableModel) tabelaUsuarios.getModel();
+        model.setRowCount(0); 
+        List<Object[]> dados = listarUsuariosTabela();
+        for (Object[] linha : dados) {
+            model.addRow(linha);
+        }  
+    }
+    
+    public static List<Object[]> listarUsuariosTabela() {
+        List<Object[]> dados = new ArrayList<>();
+        Gson gson = new Gson();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Map<String, String> m = gson.fromJson(linha, Map.class);
+                dados.add(new Object[]{m.getOrDefault("nome", "-"),m.getOrDefault("cpf", "-"),"Médico"});
+            }
+        } catch (IOException e) {
+        }
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("recepcionistas.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Map<String, String> r = gson.fromJson(linha, Map.class);
+                dados.add(new Object[]{ r.getOrDefault("nome", "-"),r.getOrDefault("cpf", "-"),"Recepcionista"});
+            }
+        } catch (IOException e) {
+        }
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader("pacientes.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+                Map<String, String> p = gson.fromJson(linha, Map.class);
+                dados.add(new Object[]{ p.getOrDefault("nome", "-"), p.getOrDefault("cpf", "-"),"Paciente"});
+            }
+        } catch (IOException e) {
+        }
+        return dados;
+    }
     
     
     

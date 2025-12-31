@@ -19,14 +19,11 @@ public class Recepcionista extends Usuarios {
     }
     
     public static void cadastrarRecepcionistaJson(String nome, String cpf, String senha) {
-
         Map<String, String> recepcionistaMap = new LinkedHashMap<>();
         recepcionistaMap.put("nome", nome);
         recepcionistaMap.put("cpf", cpf);
         recepcionistaMap.put("senha", senha);
-
         Gson gson = new Gson();
-
         try (FileWriter writer = new FileWriter("recepcionistas.json", true)) {
             writer.write(gson.toJson(recepcionistaMap));
             writer.write(System.lineSeparator());
@@ -36,17 +33,12 @@ public class Recepcionista extends Usuarios {
     }
 
     public static boolean loginRecepcionista(String cpf, String senha) {
-
         Gson gson = new Gson();
         try (BufferedReader reader = new BufferedReader(new FileReader("recepcionistas.json"))) {
             String linha;
-
             while ((linha = reader.readLine()) != null) {
-
-                Map<String, String> recepcionistaMap
-                        = gson.fromJson(linha, Map.class);
-                if (recepcionistaMap.get("cpf").equals(cpf)
-                        && recepcionistaMap.get("senha").equals(senha)) {
+                Map<String, String> recepcionistaMap = gson.fromJson(linha, Map.class);
+                if (recepcionistaMap.get("cpf").equals(cpf)&& recepcionistaMap.get("senha").equals(senha)) {
                     return true;
                 }
             }
@@ -57,13 +49,10 @@ public class Recepcionista extends Usuarios {
         return false;
     }
     public static List<String> listarRecepcionistas() {
-
         List<String> lista = new ArrayList<>();
         Gson gson = new Gson();
-
         try (BufferedReader reader = new BufferedReader(new FileReader("recepcionistas.json"))) {
             String linha;
-
             while ((linha = reader.readLine()) != null) {
                 lista.add(linha);
             }
@@ -75,14 +64,11 @@ public class Recepcionista extends Usuarios {
     
     
     public static void deletarRecepcionista(String cpf) {
-
         File arquivo = new File("recepcionistas.json");
         List<String> linhasRestantes = new ArrayList<>();
         Gson gson = new Gson();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
             String linha;
-
             while ((linha = reader.readLine()) != null) {
                 Map<?, ?> recep = gson.fromJson(linha, Map.class);
                 if (!recep.get("cpf").equals(cpf)) {
@@ -92,7 +78,6 @@ public class Recepcionista extends Usuarios {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         try (FileWriter writer = new FileWriter(arquivo, false)) {
             for (String l : linhasRestantes) {
                 writer.write(l);

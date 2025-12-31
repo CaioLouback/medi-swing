@@ -37,33 +37,16 @@ public class Consulta {
     }
     
     public static String normalizar(String texto) {
-        return Normalizer
-                .normalize(texto, Normalizer.Form.NFD)
-                .replaceAll("[^\\p{ASCII}]", "")
-                .replaceAll("\\s+", "")
-                .toLowerCase()
-                .trim();
+        return Normalizer.normalize(texto, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").replaceAll("\\s+", "").toLowerCase().trim();
     }
     
-    
-    
-    public static void salvarConsultaJson(
-            String nomeMedico,
-            String dia,
-            String hora,
-            String paciente
-    ) {
+    public static void salvarConsultaJson(String nomeMedico,String dia,String hora,String paciente) {
 
         Gson gson = new Gson();
-
         String medicoNormalizado = normalizar(nomeMedico);
-        String pacienteNormalizado = Normalizer
-                .normalize(paciente, Normalizer.Form.NFD)
-                .replaceAll("[^\\p{ASCII}]", "")
-                .trim();
-
+        String pacienteNormalizado = Normalizer.normalize(paciente, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").trim();
+        
         File arquivo = new File("agenda_" + medicoNormalizado + ".json");
-
         Consulta consulta = new Consulta(dia, hora, pacienteNormalizado);
 
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
@@ -76,27 +59,18 @@ public class Consulta {
     
     public static void deletarConsultaJson(String nomeMedico,String dia, String hora,String paciente) {
         Gson gson = new Gson();
-        
+    
         String medicoNormalizado = normalizar(nomeMedico);
-        
         File arquivo = new File("agenda_" + medicoNormalizado + ".json");
-
         if (!arquivo.exists()) {
             return;
         }
-
         List<Consulta> restantes = new ArrayList<>();
-
         try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
             String linha;
             while ((linha = br.readLine()) != null) {
                 Consulta c = gson.fromJson(linha, Consulta.class);
-
-                boolean mesmaConsulta
-                        = c.getDia().equals(dia)
-                        && c.getHora().equals(hora)
-                        && c.getPaciente().equals(paciente);
-
+                boolean mesmaConsulta= c.getDia().equals(dia)&& c.getHora().equals(hora)&& c.getPaciente().equals(paciente);
                 if (!mesmaConsulta) {
                     restantes.add(c);
                 }
@@ -104,7 +78,6 @@ public class Consulta {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, false))) {
             for (Consulta c : restantes) {
                 bw.write(gson.toJson(c));

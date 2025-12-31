@@ -1,5 +1,9 @@
 package models;
 
+import static models.Medico.deletarMedico;
+import static models.Paciente.deletarPaciente;
+import static models.Recepcionista.deletarRecepcionista;
+
 
 public class Usuarios {
     protected int id;
@@ -42,5 +46,22 @@ public class Usuarios {
         
         
     }
+    
+    public static void deletarUsuario(String cpf, String tipo) {
+        switch (tipo) {
+            case "Médico":
+                deletarMedico(cpf);
+                break;
+
+            case "Paciente":
+                deletarPaciente(cpf);
+                break;
+
+            case "Recepcionista":
+                deletarRecepcionista(cpf);
+                break;
+        }
+    }
+    
     
 }

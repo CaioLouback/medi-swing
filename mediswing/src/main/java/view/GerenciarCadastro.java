@@ -4,13 +4,11 @@
  */
 package view;
 
+
+import static controller.AdministradorController.listarUsuariosTabela;
+import static controller.AdministradorController.validarExclusao;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static models.Administrador.listarUsuariosTabela;
-import static models.Medico.deletarMedico;
-import static models.Paciente.deletarPaciente;
-import static models.Recepcionista.deletarRecepcionista;
 
 /**
  *
@@ -33,36 +31,6 @@ public class GerenciarCadastro extends javax.swing.JDialog {
             model.addRow(linha);
         }
     }
-    
-    private void deletarUsuario(String cpf, String tipo) {
-
-        switch (tipo) {
-            case "Médico":
-                deletarMedico(cpf);
-                break;
-
-            case "Paciente":
-                deletarPaciente(cpf);
-                break;
-
-            case "Recepcionista":
-                deletarRecepcionista(cpf);
-                break;
-        }
-    }
-    
-    private void atualizarTabela() {
-        DefaultTableModel model = (DefaultTableModel) tabelaUsuarios.getModel();
-        model.setRowCount(0); 
-        
-        List<Object[]> dados = listarUsuariosTabela();
-
-        for (Object[] linha : dados) {
-            model.addRow(linha);
-        }
-        
-    }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -157,33 +125,7 @@ public class GerenciarCadastro extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
-    int linhaSelecionada = tabelaUsuarios.getSelectedRow();
-
-    if (linhaSelecionada == -1) {
-        JOptionPane.showMessageDialog(
-            this,
-            "Selecione um usuário na tabela!",
-            "Aviso",
-            JOptionPane.WARNING_MESSAGE
-        );
-        return;
-    }
-
-    String nome = tabelaUsuarios.getValueAt(linhaSelecionada, 0).toString();
-    String cpf  = tabelaUsuarios.getValueAt(linhaSelecionada, 1).toString();
-    String tipo = tabelaUsuarios.getValueAt(linhaSelecionada, 2).toString();
-
-    int opcao = JOptionPane.showConfirmDialog(
-        this,
-        "Deseja realmente excluir o usuário:\n" + nome,
-        "Confirmação",
-        JOptionPane.YES_NO_OPTION
-    );
-
-    if (opcao == JOptionPane.YES_OPTION) {
-        deletarUsuario(cpf, tipo);
-        atualizarTabela();
-    }
+        validarExclusao(tabelaUsuarios, this);
         
     }//GEN-LAST:event_btnDeletarActionPerformed
 

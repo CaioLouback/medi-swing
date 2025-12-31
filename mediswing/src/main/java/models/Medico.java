@@ -52,21 +52,15 @@ public class Medico extends Usuarios {
     
     public static boolean loginMedico(String cpf, String senha) {
         Gson gson = new Gson();
-
         try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
             String linha;
-
             while ((linha = reader.readLine()) != null) {
-
-                Map<String, String> medicoMap =
-                        gson.fromJson(linha, Map.class);
-
+                Map<String, String> medicoMap =gson.fromJson(linha, Map.class);
                 if (medicoMap.get("cpf").equals(cpf) &&
                     medicoMap.get("senha").equals(senha)) {
                     return true;
                 }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -75,31 +69,23 @@ public class Medico extends Usuarios {
     }
     
     public static List<String> listarMedicos() {
-
         List<String> lista = new ArrayList<>();
         Gson gson = new Gson();
-
         try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
             String linha;
-
-            while ((linha = reader.readLine()) != null) {
-                lista.add(linha);
+            while ((linha = reader.readLine()) != null) {lista.add(linha);
             }
         } catch (IOException e) {
         }
-
         return lista;
     }
 
     public static void deletarMedico(String cpf) {
-
         File arquivo = new File("medicos.json");
         List<String> linhasRestantes = new ArrayList<>();
         Gson gson = new Gson();
-
         try (BufferedReader reader = new BufferedReader(new FileReader(arquivo))) {
             String linha;
-
             while ((linha = reader.readLine()) != null) {
                 Map<?, ?> medico = gson.fromJson(linha, Map.class);
                 if (!medico.get("cpf").equals(cpf)) {
@@ -109,7 +95,6 @@ public class Medico extends Usuarios {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         try (FileWriter writer = new FileWriter(arquivo, false)) {
             for (String l : linhasRestantes) {
                 writer.write(l);
@@ -121,21 +106,12 @@ public class Medico extends Usuarios {
     }
     
     public static List<String> listarNomesMedicos() {
-
         List<String> lista = new ArrayList<>();
         Gson gson = new Gson();
-
         try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
             String linha;
-
             while ((linha = reader.readLine()) != null) {
-
-                Map<String, String> medicoMap = gson.fromJson(
-                        linha,
-                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
-                        }.getType()
-                );
-
+                Map<String, String> medicoMap = gson.fromJson(linha,new com.google.gson.reflect.TypeToken<Map<String, String>>() {}.getType());
                 lista.add(medicoMap.get("nome"));
             }
         } catch (IOException e) {
@@ -145,19 +121,15 @@ public class Medico extends Usuarios {
         return lista;
     }
     
-        public static List<Consulta> carregarAgendaDoMedico(String nomeMedico) {
-
+    public static List<Consulta> carregarAgendaDoMedico(String nomeMedico) {
         List<Consulta> consultas = new ArrayList<>();
         Gson gson = new Gson();
-
         String medicoNormalizado = normalizar(nomeMedico);
         File arquivo = new File("agenda_" + medicoNormalizado + ".json");
-
         if (!arquivo.exists()) {
-            System.out.println("Arquivo NÃO encontrado: " + arquivo.getAbsolutePath());
+            System.out.println("Arquivo NAO encontrado: " + arquivo.getAbsolutePath());
             return consultas;
         }
-
         try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
             String linha;
             while ((linha = br.readLine()) != null) {
