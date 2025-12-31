@@ -4,18 +4,13 @@
  */
 package view;
 
-import static dao.AdministradorDAO.listarUsuariosTabela;
-import static dao.MedicoDAO.deletarMedico;
-import static dao.MedicoDAO.listarMedicos;
-import static dao.PacienteDAO.deletarPaciente;
-import static dao.PacienteDAO.listarPacientes;
-import static dao.RecepcionistaDAO.deletarRecepcionista;
-import static dao.RecepcionistaDAO.listarRecepcionistas;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import static models.Administrador.listarUsuariosTabela;
+import static models.Medico.deletarMedico;
+import static models.Paciente.deletarPaciente;
+import static models.Recepcionista.deletarRecepcionista;
 
 /**
  *

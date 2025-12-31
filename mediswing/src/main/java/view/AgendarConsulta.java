@@ -6,6 +6,7 @@ package view;
 
 import static controller.RecepController.carregarComboMedicos;
 import static controller.RecepController.carregarComboPacientes;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,6 +23,8 @@ public class AgendarConsulta extends javax.swing.JDialog {
         carregarComboMedicos(cbMedico);
         carregarComboPacientes(cbPaciente);
     }
+    
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -35,7 +38,7 @@ public class AgendarConsulta extends javax.swing.JDialog {
         cbMedico = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaConsultas = new javax.swing.JTable();
         cbPaciente = new javax.swing.JComboBox<>();
         btnSalvar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -55,7 +58,7 @@ public class AgendarConsulta extends javax.swing.JDialog {
 
         jLabel1.setText("Escolha um Médico:");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"-", "-", "-", "-", "-"},
                 {"-", "-", "-", "-", "-"},
@@ -72,15 +75,25 @@ public class AgendarConsulta extends javax.swing.JDialog {
                 "Segunda", "Terça", "Quarta", "Quinta", "Sexta"
             }
         ));
-        jTable1.setRowHeight(30);
-        jTable1.setRowMargin(1);
-        jScrollPane1.setViewportView(jTable1);
+        tabelaConsultas.setRowHeight(30);
+        tabelaConsultas.setRowMargin(1);
+        jScrollPane1.setViewportView(tabelaConsultas);
 
         btnSalvar.setText("Salvar");
+        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSalvarActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Pacientes");
 
-        jButton1.setText("Cancelar");
+        jButton1.setText("Cancelar Consulta");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setText("8h");
 
@@ -200,6 +213,85 @@ public class AgendarConsulta extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+        int linha = tabelaConsultas.getSelectedRow();
+        int coluna = tabelaConsultas.getSelectedColumn();
+
+        if (linha == -1 || coluna == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione um horário na tabela!",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        String paciente = cbPaciente.getSelectedItem().toString();
+
+        if (paciente == null || paciente.isEmpty()) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione um paciente!",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        Object valorAtual = tabelaConsultas.getValueAt(linha, coluna);
+
+        if (valorAtual != null && !valorAtual.toString().equals("-")) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Esse horário já está ocupado!",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        tabelaConsultas.setValueAt(paciente, linha, coluna);
+    }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int linha = tabelaConsultas.getSelectedRow();
+        int coluna = tabelaConsultas.getSelectedColumn();
+
+        if (linha == -1 || coluna == -1) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione um horário na tabela!",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        Object valorAtual = tabelaConsultas.getValueAt(linha, coluna);
+
+        if (valorAtual == null || valorAtual.toString().equals("-")) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Esse horário já está livre!",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE
+            );
+            return;
+        }
+
+        int opcao = JOptionPane.showConfirmDialog(
+                this,
+                "Deseja cancelar a consulta?",
+                "Confirmação",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        if (opcao == JOptionPane.YES_OPTION) {
+            tabelaConsultas.setValueAt("-", linha, coluna);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -260,6 +352,6 @@ public class AgendarConsulta extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabelaConsultas;
     // End of variables declaration//GEN-END:variables
 }

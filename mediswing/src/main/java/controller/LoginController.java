@@ -1,10 +1,9 @@
 package controller;
 
-import static dao.AdministradorDAO.loginAdministrador;
-import static dao.MedicoDAO.loginMedico;
-import static dao.RecepcionistaDAO.loginRecepcionista;
 import javax.swing.JOptionPane;
-import models.Usuarios;
+import static models.Administrador.loginAdministrador;
+import static models.Medico.loginMedico;
+import static models.Recepcionista.loginRecepcionista;
 import view.AdministradorTela;
 import view.MedicoTela;
 import view.RecepcionistaTela;

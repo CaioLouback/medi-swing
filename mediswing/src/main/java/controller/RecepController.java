@@ -1,8 +1,8 @@
 package controller;
 
-import static dao.MedicoDAO.listarNomesMedicos;
-import static dao.PacienteDAO.listarNomesPacientes;
 import javax.swing.JComboBox;
+import static models.Medico.listarNomesMedicos;
+import static models.Paciente.listarNomesPacientes;
 
 
 public class RecepController {
