@@ -6,10 +6,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import static models.Consulta.normalizar;
 
 
 public class Medico extends Usuarios {
@@ -144,5 +146,30 @@ public class Medico extends Usuarios {
         return lista;
     }
     
-    
+        public static List<Consulta> carregarAgendaDoMedico(String nomeMedico) {
+
+        List<Consulta> consultas = new ArrayList<>();
+        Gson gson = new Gson();
+
+        String medicoNormalizado = normalizar(nomeMedico);
+        File arquivo = new File("agenda_" + medicoNormalizado + ".json");
+
+        if (!arquivo.exists()) {
+            System.out.println("Arquivo NÃO encontrado: " + arquivo.getAbsolutePath());
+            return consultas;
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                Consulta c = gson.fromJson(linha, Consulta.class);
+                consultas.add(c);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return consultas;
+    }
+
 }

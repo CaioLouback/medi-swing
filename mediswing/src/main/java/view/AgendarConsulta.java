@@ -6,7 +6,11 @@ package view;
 
 import static controller.RecepController.carregarComboMedicos;
 import static controller.RecepController.carregarComboPacientes;
+import java.util.List;
 import javax.swing.JOptionPane;
+import models.Consulta;
+import static models.Consulta.salvarConsultaJson;
+import static models.Medico.carregarAgendaDoMedico;
 
 /**
  *
@@ -22,7 +26,53 @@ public class AgendarConsulta extends javax.swing.JDialog {
         initComponents();
         carregarComboMedicos(cbMedico);
         carregarComboPacientes(cbPaciente);
+        String valor = cbMedico.getSelectedItem().toString();
+        carregarAgendaDoMedico(valor);
     }
+    private void preencherTabelaAgenda(List<Consulta> consultas) {
+
+        for (Consulta c : consultas) {
+
+            String dia = c.getDia();
+            String hora = c.getHora();
+            String paciente = c.getPaciente();
+
+            int colunaDia = -1;
+            for (int j = 0; j < tabelaConsultas.getColumnCount(); j++) {
+                if (tabelaConsultas.getColumnName(j).equalsIgnoreCase(dia)) {
+                    colunaDia = j;
+                    break;
+                }
+            }
+
+            int linhaHora = -1;
+            for (int i = 0; i < HORAS.length; i++) {
+                if (HORAS[i].equals(hora)) {
+                    linhaHora = i;
+                    break;
+                }
+            }
+
+            if (linhaHora != -1 && colunaDia != -1) {
+                tabelaConsultas.setValueAt(paciente, linhaHora, colunaDia);
+            }
+        }
+    }
+    
+    private void limparTabelaAgenda() {
+        for (int i = 0; i < tabelaConsultas.getRowCount(); i++) {
+            for (int j = 0; j < tabelaConsultas.getColumnCount(); j++) {
+                tabelaConsultas.setValueAt("-", i, j);
+            }
+        }
+    }
+
+    private final String[] HORAS = {
+        "08:00", "09:00", "10:00", "11:00", "12:00",
+        "13:00", "14:00", "15:00", "16:00", "17:00"
+    };
+
+    
     
    
 
@@ -40,9 +90,9 @@ public class AgendarConsulta extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaConsultas = new javax.swing.JTable();
         cbPaciente = new javax.swing.JComboBox<>();
-        btnSalvar = new javax.swing.JButton();
+        btnAgendarConsulta = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnCancelarConsulta = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -55,6 +105,12 @@ public class AgendarConsulta extends javax.swing.JDialog {
         jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+
+        cbMedico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbMedicoActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Escolha um Médico:");
 
@@ -79,19 +135,19 @@ public class AgendarConsulta extends javax.swing.JDialog {
         tabelaConsultas.setRowMargin(1);
         jScrollPane1.setViewportView(tabelaConsultas);
 
-        btnSalvar.setText("Salvar");
-        btnSalvar.addActionListener(new java.awt.event.ActionListener() {
+        btnAgendarConsulta.setText("Agendar Consulta");
+        btnAgendarConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSalvarActionPerformed(evt);
+                btnAgendarConsultaActionPerformed(evt);
             }
         });
 
         jLabel2.setText("Pacientes");
 
-        jButton1.setText("Cancelar Consulta");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelarConsulta.setText("Cancelar Consulta");
+        btnCancelarConsulta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCancelarConsultaActionPerformed(evt);
             }
         });
 
@@ -135,9 +191,9 @@ public class AgendarConsulta extends javax.swing.JDialog {
                 .addGap(129, 129, 129))
             .addGroup(layout.createSequentialGroup()
                 .addGap(172, 172, 172)
-                .addComponent(btnSalvar)
+                .addComponent(btnAgendarConsulta)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(btnCancelarConsulta)
                 .addGap(179, 179, 179))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -205,15 +261,15 @@ public class AgendarConsulta extends javax.swing.JDialog {
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(62, 62, 62)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSalvar)
-                    .addComponent(jButton1))
+                    .addComponent(btnAgendarConsulta)
+                    .addComponent(btnCancelarConsulta))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
+    private void btnAgendarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgendarConsultaActionPerformed
         int linha = tabelaConsultas.getSelectedRow();
         int coluna = tabelaConsultas.getSelectedColumn();
 
@@ -228,7 +284,7 @@ public class AgendarConsulta extends javax.swing.JDialog {
         }
 
         String paciente = cbPaciente.getSelectedItem().toString();
-
+        String medico = cbMedico.getSelectedItem().toString();
         if (paciente == null || paciente.isEmpty()) {
             JOptionPane.showMessageDialog(
                     this,
@@ -250,11 +306,15 @@ public class AgendarConsulta extends javax.swing.JDialog {
             );
             return;
         }
-
+        
         tabelaConsultas.setValueAt(paciente, linha, coluna);
-    }//GEN-LAST:event_btnSalvarActionPerformed
+        String dia = tabelaConsultas.getColumnName(coluna);
+        String hora = HORAS[linha];
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        salvarConsultaJson(medico, dia, hora, paciente);
+    }//GEN-LAST:event_btnAgendarConsultaActionPerformed
+
+    private void btnCancelarConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarConsultaActionPerformed
         int linha = tabelaConsultas.getSelectedRow();
         int coluna = tabelaConsultas.getSelectedColumn();
 
@@ -290,7 +350,23 @@ public class AgendarConsulta extends javax.swing.JDialog {
         if (opcao == JOptionPane.YES_OPTION) {
             tabelaConsultas.setValueAt("-", linha, coluna);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnCancelarConsultaActionPerformed
+
+    private void cbMedicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbMedicoActionPerformed
+        
+        if (cbMedico.getSelectedItem() == null) {
+            return;
+        }
+
+        String nomeMedico = cbMedico.getSelectedItem().toString();
+
+        limparTabelaAgenda();
+
+        List<Consulta> consultas = carregarAgendaDoMedico(nomeMedico);
+
+        preencherTabelaAgenda(consultas);
+
+    }//GEN-LAST:event_cbMedicoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -335,10 +411,10 @@ public class AgendarConsulta extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnSalvar;
+    private javax.swing.JButton btnAgendarConsulta;
+    private javax.swing.JButton btnCancelarConsulta;
     private javax.swing.JComboBox<String> cbMedico;
     private javax.swing.JComboBox<String> cbPaciente;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
