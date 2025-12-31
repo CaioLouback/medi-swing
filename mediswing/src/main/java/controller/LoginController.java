@@ -22,7 +22,7 @@ public class LoginController {
             } else {
                 if (med == true ) {
                     janela.dispose();
-                    MedicoTela tela = new MedicoTela();
+                    MedicoTela tela = new MedicoTela(cpf);
                     tela.setLocationRelativeTo(null);
                     tela.setVisible(true);
                     return;

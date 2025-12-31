@@ -4,6 +4,12 @@
  */
 package view;
 
+import static controller.ConsultaController.preencherTabelaAgenda;
+import java.util.List;
+import static models.Administrador.buscarNomePorCpf;
+import models.Consulta;
+import static models.Medico.carregarAgendaDoMedico;
+
 /**
  *
  * @author Caio Louback
@@ -15,6 +21,13 @@ public class MedicoTela extends javax.swing.JFrame {
      */
     public MedicoTela() {
         initComponents();
+    }
+    
+    public MedicoTela(String cpf) {
+        initComponents();
+        String medico = buscarNomePorCpf(cpf);
+        List<Consulta> consultas = carregarAgendaDoMedico(medico);
+        preencherTabelaAgenda(tabelaConsultas, consultas);
     }
     
     /**
@@ -30,7 +43,7 @@ public class MedicoTela extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaConsultas = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -61,7 +74,7 @@ public class MedicoTela extends javax.swing.JFrame {
 
         jButton2.setText("Gerar Prontuário");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"-", "-", "-", "-", "-"},
                 {"-", "-", "-", "-", "-"},
@@ -86,8 +99,8 @@ public class MedicoTela extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setRowHeight(30);
-        jScrollPane1.setViewportView(jTable1);
+        tabelaConsultas.setRowHeight(30);
+        jScrollPane1.setViewportView(tabelaConsultas);
 
         jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\Caio Louback\\Documents\\NetBeansProjects\\medi-swing\\mediswing\\src\\main\\resource\\imagens\\horizontal.png")); // NOI18N
 
@@ -114,7 +127,7 @@ public class MedicoTela extends javax.swing.JFrame {
 
         jLabel12.setText("17h");
 
-        jButton3.setText("jButton3");
+        jButton3.setText("Histórico");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -262,7 +275,7 @@ public class MedicoTela extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblLogout;
+    private javax.swing.JTable tabelaConsultas;
     // End of variables declaration//GEN-END:variables
 }

@@ -59,5 +59,69 @@ public class Administrador extends Usuarios {
         return false;
     }
     
+    public static String buscarNomePorCpf(String cpf) {
+
+        Gson gson = new Gson();
+
+        // MÉDICOS
+        try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+
+                Map<String, String> medicoMap = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                if (medicoMap.get("cpf").equals(cpf)) {
+                    return medicoMap.get("nome");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // PACIENTES
+        try (BufferedReader reader = new BufferedReader(new FileReader("pacientes.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+
+                Map<String, String> pacienteMap = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                if (pacienteMap.get("cpf").equals(cpf)) {
+                    return pacienteMap.get("nome");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // RECEPCIONISTAS
+        try (BufferedReader reader = new BufferedReader(new FileReader("recepcionistas.json"))) {
+            String linha;
+            while ((linha = reader.readLine()) != null) {
+
+                Map<String, String> recepMap = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                if (recepMap.get("cpf").equals(cpf)) {
+                    return recepMap.get("nome");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null; // não encontrado
+    }
+    
     
 }
