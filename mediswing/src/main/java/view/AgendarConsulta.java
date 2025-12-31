@@ -4,6 +4,9 @@
  */
 package view;
 
+import static controller.RecepController.carregarComboMedicos;
+import static controller.RecepController.carregarComboPacientes;
+
 /**
  *
  * @author Caio Louback
@@ -16,6 +19,8 @@ public class AgendarConsulta extends javax.swing.JDialog {
     public AgendarConsulta(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        carregarComboMedicos(cbMedico);
+        carregarComboPacientes(cbPaciente);
     }
 
     /**
@@ -52,16 +57,16 @@ public class AgendarConsulta extends javax.swing.JDialog {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"8:00", "8:00", "8:00", "8:00", "8:00"},
-                {"9:00", "9:00", "9:00", "9:00", "9:00"},
-                {"10:00", "10:00", "10:00", "10:00", "10:00"},
-                {"11:00", "11:00", "11:00", "11:00", "11:00"},
-                {"12:00", "12:00", "12:00", "12:00", "12:00"},
-                {"13:00", "13:00", "13:00", "13:00", "13:00"},
-                {"14:00", "14:00", "14:00", "14:00", "14:00"},
-                {"15:00", "15:00", "15:00", "15:00", "15:00"},
-                {"16:00", "16:00", "16:00", "16:00", "16:00"},
-                {"17:00", "17:00", "17:00", "17:00", "17:00"}
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"},
+                {"-", "-", "-", "-", "-"}
             },
             new String [] {
                 "Segunda", "Terça", "Quarta", "Quinta", "Sexta"

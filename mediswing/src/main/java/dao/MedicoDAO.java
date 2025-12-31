@@ -104,4 +104,29 @@ public class MedicoDAO {
         }
     }
     
+    public static List<String> listarNomesMedicos() {
+
+        List<String> lista = new ArrayList<>();
+        Gson gson = new Gson();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
+            String linha;
+
+            while ((linha = reader.readLine()) != null) {
+
+                Map<String, String> medicoMap = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                lista.add(medicoMap.get("nome"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+    
 }

@@ -78,4 +78,29 @@ public class PacienteDAO {
         }
     }
     
+    public static List<String> listarNomesPacientes() {
+
+        List<String> lista = new ArrayList<>();
+        Gson gson = new Gson();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader("pacientes.json"))) {
+            String linha;
+
+            while ((linha = reader.readLine()) != null) {
+
+                Map<String, String> pacienteMap = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                lista.add(pacienteMap.get("nome"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lista;
+    }
+    
 }
