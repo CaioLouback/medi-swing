@@ -123,5 +123,29 @@ public class Administrador extends Usuarios {
         return null; // não encontrado
     }
     
+    public static String buscarCpfPacientePorNome(String nomePaciente) {
+
+        Gson gson = new Gson();
+
+        try (BufferedReader br = new BufferedReader(new FileReader("pacientes.json"))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+
+                Map<String, String> map = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                if (map.get("nome").equalsIgnoreCase(nomePaciente)) {
+                    return map.get("cpf").replaceAll("[^0-9]", "");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+}
     
 }

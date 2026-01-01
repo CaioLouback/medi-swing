@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import static models.Administrador.buscarNomePorCpf;
+import static models.Administrador.buscarCpfPacientePorNome;
 import static models.Consulta.normalizar;
 
 
@@ -192,5 +192,100 @@ public class Medico extends Usuarios {
             e.printStackTrace();
         }
     }
+    
+    public static void criarProntuarioJson(String nomePaciente,String medico,String dia,String hora,String observacao) {
+        String cpfPaciente = buscarCpfPorNomeJson(nomePaciente);
+        Gson gson = new Gson();
+        String cpfNormalizado = cpfPaciente.replaceAll("[^0-9]", "");
+        File arquivo = new File("prontuario_" + cpfNormalizado + ".json");
+        Map<String, String> prontuario = new LinkedHashMap<>();
+        prontuario.put("medico", medico);
+        prontuario.put("Paciente", nomePaciente);
+        prontuario.put("dia", dia);
+        prontuario.put("hora", hora);
+        prontuario.put("observacao", observacao);
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
+            bw.write(gson.toJson(prontuario));
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static String buscarReceitasPaciente(String paciente) {
+
+        Gson gson = new Gson();
+        StringBuilder sb = new StringBuilder();
+        String cpfPaciente = buscarCpfPacientePorNome(paciente);
+        File arquivo = new File("receitas_" + normalizar(cpfPaciente) + ".json");
+
+        if (!arquivo.exists()) {
+            sb.append("Nenhuma receita encontrada.\n");
+            return sb.toString();
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+
+                Map<String, String> receita = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                sb.append("Dia: ").append(receita.get("dia")).append("\n");
+                sb.append("Hora: ").append(receita.get("hora")).append("\n");
+                sb.append("Descrição: ").append(receita.get("descricao")).append("\n");
+                sb.append("---------------------\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
+    
+    public static String buscarProntuariosPaciente(String paciente, String medicoLogado) {
+
+        Gson gson = new Gson();
+        StringBuilder sb = new StringBuilder();
+        String cpfPaciente = buscarCpfPacientePorNome(paciente);
+        File arquivo = new File("prontuario_" + normalizar(cpfPaciente) + ".json");
+
+        if (!arquivo.exists()) {
+            sb.append("Nenhum prontuário encontrado.\n");
+            return sb.toString();
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+
+                Map<String, String> prontuario = gson.fromJson(
+                        linha,
+                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
+                        }.getType()
+                );
+
+                // 🔐 REGRA DE NEGÓCIO
+                if (!prontuario.get("medico").equals(medicoLogado)) {
+                    continue;
+                }
+
+                sb.append("Dia: ").append(prontuario.get("dia")).append("\n");
+                sb.append("Hora: ").append(prontuario.get("hora")).append("\n");
+                sb.append("Observação: ").append(prontuario.get("observacao")).append("\n");
+                sb.append("---------------------\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+    }
+ 
+    
     
 }
