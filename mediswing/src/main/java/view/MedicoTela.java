@@ -5,6 +5,7 @@
 package view;
 
 import static controller.ConsultaController.preencherTabelaAgenda;
+import static controller.MedicoController.validarReceita;
 import java.util.List;
 import static models.Administrador.buscarNomePorCpf;
 import models.Consulta;
@@ -15,7 +16,7 @@ import static models.Medico.carregarAgendaDoMedico;
  * @author Caio Louback
  */
 public class MedicoTela extends javax.swing.JFrame {
-
+    String medico;
     /**
      * Creates new form MedicoMenu
      */
@@ -25,7 +26,7 @@ public class MedicoTela extends javax.swing.JFrame {
     
     public MedicoTela(String cpf) {
         initComponents();
-        String medico = buscarNomePorCpf(cpf);
+        medico = buscarNomePorCpf(cpf);
         List<Consulta> consultas = carregarAgendaDoMedico(medico);
         preencherTabelaAgenda(tabelaConsultas, consultas);
     }
@@ -40,8 +41,8 @@ public class MedicoTela extends javax.swing.JFrame {
     private void initComponents() {
 
         lblLogout = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnReceita = new javax.swing.JButton();
+        btnProntuario = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tabelaConsultas = new javax.swing.JTable();
         jLabel2 = new javax.swing.JLabel();
@@ -56,7 +57,6 @@ public class MedicoTela extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Inicial: Médico");
@@ -70,9 +70,14 @@ public class MedicoTela extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Receita Médica");
+        btnReceita.setText("Receita Médica");
+        btnReceita.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReceitaActionPerformed(evt);
+            }
+        });
 
-        jButton2.setText("Gerar Prontuário");
+        btnProntuario.setText("Gerar Prontuário");
 
         tabelaConsultas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -127,8 +132,6 @@ public class MedicoTela extends javax.swing.JFrame {
 
         jLabel12.setText("17h");
 
-        jButton3.setText("Histórico");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -141,11 +144,9 @@ public class MedicoTela extends javax.swing.JFrame {
                 .addGap(26, 26, 26))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(87, 87, 87)
-                .addComponent(jButton1)
-                .addGap(98, 98, 98)
-                .addComponent(jButton3)
+                .addComponent(btnReceita)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(btnProntuario)
                 .addGap(104, 104, 104))
             .addGroup(layout.createSequentialGroup()
                 .addGap(100, 100, 100)
@@ -204,11 +205,9 @@ public class MedicoTela extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2)
-                        .addComponent(jButton1))
-                    .addComponent(jButton3))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnProntuario)
+                    .addComponent(btnReceita))
                 .addGap(21, 21, 21))
         );
 
@@ -221,6 +220,10 @@ public class MedicoTela extends javax.swing.JFrame {
         tela.setLocationRelativeTo(null);
         tela.setVisible(true);
     }//GEN-LAST:event_lblLogoutMouseClicked
+
+    private void btnReceitaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReceitaActionPerformed
+        validarReceita(tabelaConsultas, this, medico);
+    }//GEN-LAST:event_btnReceitaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -259,9 +262,8 @@ public class MedicoTela extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton btnProntuario;
+    private javax.swing.JButton btnReceita;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;

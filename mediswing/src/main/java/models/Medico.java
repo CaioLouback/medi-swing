@@ -1,7 +1,10 @@
 package models;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import static controller.AdministradorController.buscarCpfPorNomeJson;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -10,6 +13,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import static models.Administrador.buscarNomePorCpf;
 import static models.Consulta.normalizar;
 
 
@@ -142,5 +148,49 @@ public class Medico extends Usuarios {
 
         return consultas;
     }
+    
+    public static void criarReceitaPaciente(String nomePaciente,String medico ,String dia,String hora,JFrame frame) {
+        String cpfPaciente = buscarCpfPorNomeJson(nomePaciente);
+        if (cpfPaciente == null) {
+            JOptionPane.showMessageDialog(
+                    frame,
+                    "CPF do paciente não encontrado!",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+        String descricao = JOptionPane.showInputDialog(frame,"Digite a receita médica:");
 
+        if (descricao == null || descricao.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame,"A receita não pode estar vazia!","Aviso",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        //String medico = buscarNomePorCpf(cpfPaciente);
+        criarReceitaPacienteJson(nomePaciente, cpfPaciente,medico,dia, hora,descricao);
+
+        JOptionPane.showMessageDialog(frame, "Receita criada com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public static void criarReceitaPacienteJson(String nomePaciente,String cpfPaciente,String medico, String dia, String hora,String descricao) {
+        Gson gson = new Gson();
+        String cpfNormalizado = cpfPaciente.replaceAll("[^0-9]", "");
+        String nomeArquivo = "receitas_" + cpfNormalizado + ".json";
+        File arquivo = new File(nomeArquivo);
+
+        Map<String, String> receita = new LinkedHashMap<>();
+        receita.put("Paciente: ",nomePaciente);
+        receita.put("medico", medico);
+        receita.put("dia", dia);
+        receita.put("hora", hora);
+        receita.put("descricao", descricao);
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
+            bw.write(gson.toJson(receita));
+            bw.newLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

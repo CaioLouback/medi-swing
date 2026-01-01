@@ -2,6 +2,7 @@ package controller;
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import static models.Medico.cadastrarMedicoJson;
 import static models.Paciente.cadastrarPacienteJson;
 import static models.Recepcionista.cadastrarRecepcionistaJson;
+import models.Usuarios;
 import static models.Usuarios.deletarUsuario;
 import view.CadastroMedico;
 import view.CadastroPaciente;
@@ -170,6 +172,22 @@ public class AdministradorController {
         return dados;
     }
     
-    
+    public static String buscarCpfPorNomeJson(String nome) {
+        Gson gson = new Gson();
+        File arquivo = new File("pacientes.json");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                Usuarios p = gson.fromJson(linha, Usuarios.class);
+                if (p.getNome().equalsIgnoreCase(nome)) {
+                    return p.getCPF();
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
     
 }
