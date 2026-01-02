@@ -41,14 +41,11 @@ public class Consulta {
     }
     
     public static void salvarConsultaJson(String nomeMedico,String dia,String hora,String paciente) {
-
         Gson gson = new Gson();
         String medicoNormalizado = normalizar(nomeMedico);
         String pacienteNormalizado = Normalizer.normalize(paciente, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "").trim();
-        
         File arquivo = new File("agenda_" + medicoNormalizado + ".json");
         Consulta consulta = new Consulta(dia, hora, pacienteNormalizado);
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
             bw.write(gson.toJson(consulta));
             bw.newLine();
@@ -59,7 +56,6 @@ public class Consulta {
     
     public static void deletarConsultaJson(String nomeMedico,String dia, String hora,String paciente) {
         Gson gson = new Gson();
-    
         String medicoNormalizado = normalizar(nomeMedico);
         File arquivo = new File("agenda_" + medicoNormalizado + ".json");
         if (!arquivo.exists()) {

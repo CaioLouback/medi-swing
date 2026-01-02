@@ -22,22 +22,17 @@ import static models.Medico.criarReceitaPaciente;
 public class MedicoController {
 
     public static void validarReceita(JTable tabelaConsultas, JFrame frame, String medico) {
-
         int linha = tabelaConsultas.getSelectedRow();
         int coluna = tabelaConsultas.getSelectedColumn();
-
         if (linha == -1 || coluna == -1) {
             JOptionPane.showMessageDialog(frame,"Selecione um paciente na tabela!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         Object valor = tabelaConsultas.getValueAt(linha, coluna);
-
         if (valor == null || valor.toString().equals("-")) {
             JOptionPane.showMessageDialog(frame,"Esse horário está livre!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         int opcao = JOptionPane.showConfirmDialog(frame,"Deseja criar uma receita para este paciente?","Confirmação",JOptionPane.YES_NO_OPTION);
         if (opcao != JOptionPane.YES_OPTION) {
             return;
@@ -53,22 +48,17 @@ public class MedicoController {
     }
     
     public static void validarProntuario(JTable tabelaConsultas, JFrame frame, String medico) {
-
         int linha = tabelaConsultas.getSelectedRow();
         int coluna = tabelaConsultas.getSelectedColumn();
-
         if (linha == -1 || coluna == -1) {
             JOptionPane.showMessageDialog(frame,"Selecione um paciente na tabela!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         Object valor = tabelaConsultas.getValueAt(linha, coluna);
-
         if (valor == null || valor.toString().equals("-")) {
             JOptionPane.showMessageDialog(frame,"Esse horário está livre!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         int opcao = JOptionPane.showConfirmDialog(frame,"Deseja criar um prontuário para este paciente?","Confirmação",JOptionPane.YES_NO_OPTION);
         if (opcao != JOptionPane.YES_OPTION) {
             return;
@@ -118,62 +108,35 @@ public class MedicoController {
             JOptionPane.showMessageDialog(frame,"O prontuário não pode estar vazio!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
         criarProntuarioJson(nomePaciente,medico,dia, hora,descricao);
-
         JOptionPane.showMessageDialog(frame, "Prontuário criado com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    public static void verHistorico(
-            JTable tabelaConsultas,
-            JTextPane textPane,
-            JFrame frame,
-            String medicoLogado
-    ) {
+    public static void verHistorico(JTable tabelaConsultas,JTextPane textPane,JFrame frame,String medicoLogado) {
         int linha = tabelaConsultas.getSelectedRow();
         int coluna = tabelaConsultas.getSelectedColumn();
-
         if (linha == -1 || coluna == -1) {
-            JOptionPane.showMessageDialog(
-                    frame,
-                    "Selecione um paciente na tabela!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
+            JOptionPane.showMessageDialog(frame,"Selecione um paciente na tabela!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         String paciente = tabelaConsultas.getValueAt(linha, coluna).toString();
-
         if (paciente.equals("-")) {
-            JOptionPane.showMessageDialog(
-                    frame,
-                    "Esse horário não possui paciente!",
-                    "Aviso",
-                    JOptionPane.WARNING_MESSAGE
-            );
+            JOptionPane.showMessageDialog(frame,"Esse horário não possui paciente!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         String historico = montarHistoricoPaciente(paciente, medicoLogado);
-
         textPane.setText(historico);
     }
     
     public static String montarHistoricoPaciente(String paciente, String medicoLogado) {
-
         StringBuilder sb = new StringBuilder();
-
         sb.append("===== HISTÓRICO DO PACIENTE =====\n\n");
         sb.append("Paciente: ").append(paciente).append("\n");
         sb.append("Médico: ").append(medicoLogado).append("\n\n");
-
         sb.append("----- RECEITAS -----\n");
         sb.append(buscarReceitasPaciente(paciente));
-
         sb.append("\n----- PRONTUÁRIOS -----\n");
         sb.append(buscarProntuariosPaciente(paciente, medicoLogado));
-
         return sb.toString();
     }
     

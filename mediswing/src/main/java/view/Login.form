@@ -44,7 +44,7 @@
                       <Component id="jPanel1" min="-2" pref="518" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="16" max="32767" attributes="0"/>
+              <EmptySpace pref="20" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -129,7 +129,7 @@
         <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="C:\Users\Caio Louback\Documents\NetBeansProjects\medi-swing\mediswing\src\main\resource\imagens\marca.png"/>
+              <Image iconType="2" name="C:\Users\Caio Louback\Documents\NetBeansProjects\medi-swing\mediswing\src\main\resources\imagens\marca.png"/>
             </Property>
           </Properties>
         </Component>

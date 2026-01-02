@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-
 public class Administrador extends Usuarios {
 
     private int nivelAcesso;
@@ -32,9 +31,7 @@ public class Administrador extends Usuarios {
         administradorMap.put("cpf", cpf);
         administradorMap.put("nivelAcesso", nivelAcesso);
         administradorMap.put("senha", senha);
-
         Gson gson = new Gson();
-
         try (FileWriter writer = new FileWriter("administradores.json", true)) {
             writer.write(gson.toJson(administradorMap));
             writer.write(System.lineSeparator());
@@ -60,20 +57,12 @@ public class Administrador extends Usuarios {
     }
     
     public static String buscarNomePorCpf(String cpf) {
-
         Gson gson = new Gson();
-
-        // MÉDICOS
+        
         try (BufferedReader reader = new BufferedReader(new FileReader("medicos.json"))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
-
-                Map<String, String> medicoMap = gson.fromJson(
-                        linha,
-                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
-                        }.getType()
-                );
-
+                Map<String, String> medicoMap = gson.fromJson(linha,new com.google.gson.reflect.TypeToken<Map<String, String>>() {}.getType());
                 if (medicoMap.get("cpf").equals(cpf)) {
                     return medicoMap.get("nome");
                 }
@@ -82,17 +71,9 @@ public class Administrador extends Usuarios {
             e.printStackTrace();
         }
 
-        // PACIENTES
         try (BufferedReader reader = new BufferedReader(new FileReader("pacientes.json"))) {
             String linha;
-            while ((linha = reader.readLine()) != null) {
-
-                Map<String, String> pacienteMap = gson.fromJson(
-                        linha,
-                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
-                        }.getType()
-                );
-
+            while ((linha = reader.readLine()) != null) { Map<String, String> pacienteMap = gson.fromJson(linha,new com.google.gson.reflect.TypeToken<Map<String, String>>() {}.getType());
                 if (pacienteMap.get("cpf").equals(cpf)) {
                     return pacienteMap.get("nome");
                 }
@@ -101,17 +82,10 @@ public class Administrador extends Usuarios {
             e.printStackTrace();
         }
 
-        // RECEPCIONISTAS
         try (BufferedReader reader = new BufferedReader(new FileReader("recepcionistas.json"))) {
             String linha;
             while ((linha = reader.readLine()) != null) {
-
-                Map<String, String> recepMap = gson.fromJson(
-                        linha,
-                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
-                        }.getType()
-                );
-
+                Map<String, String> recepMap = gson.fromJson(linha,new com.google.gson.reflect.TypeToken<Map<String, String>>() {}.getType());
                 if (recepMap.get("cpf").equals(cpf)) {
                     return recepMap.get("nome");
                 }
@@ -120,23 +94,15 @@ public class Administrador extends Usuarios {
             e.printStackTrace();
         }
 
-        return null; // não encontrado
+        return null; 
     }
     
     public static String buscarCpfPacientePorNome(String nomePaciente) {
-
         Gson gson = new Gson();
-
         try (BufferedReader br = new BufferedReader(new FileReader("pacientes.json"))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-
-                Map<String, String> map = gson.fromJson(
-                        linha,
-                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
-                        }.getType()
-                );
-
+                Map<String, String> map = gson.fromJson(linha,new com.google.gson.reflect.TypeToken<Map<String, String>>() {}.getType());
                 if (map.get("nome").equalsIgnoreCase(nomePaciente)) {
                     return map.get("cpf").replaceAll("[^0-9]", "");
                 }

@@ -50,7 +50,6 @@ public class ConsultaController {
     public static void validarCancelamento(JTable tabelaConsultas,javax.swing.JDialog dialog, JComboBox<String> cbMedico){
         int linha = tabelaConsultas.getSelectedRow();
         int coluna = tabelaConsultas.getSelectedColumn();
-
         if (linha == -1 || coluna == -1) {
             JOptionPane.showMessageDialog(dialog,"Selecione um horário na tabela!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
@@ -60,9 +59,7 @@ public class ConsultaController {
             JOptionPane.showMessageDialog(dialog,"Esse horário já está livre!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         int opcao = JOptionPane.showConfirmDialog(dialog,"Deseja cancelar a consulta?","Confirmação",JOptionPane.YES_NO_OPTION);
-
         if (opcao == JOptionPane.YES_OPTION) {
             String medico = cbMedico.getSelectedItem().toString();
             String paciente = tabelaConsultas.getValueAt(linha, coluna).toString();
@@ -90,7 +87,6 @@ public class ConsultaController {
             JOptionPane.showMessageDialog(dialog,"Selecione um paciente!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         Object valorAtual = tabelaConsultas.getValueAt(linha, coluna);
         if (valorAtual != null && !valorAtual.toString().equals("-")) {
             JOptionPane.showMessageDialog( dialog,"Esse horário já está ocupado!", "Aviso",JOptionPane.WARNING_MESSAGE);

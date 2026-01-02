@@ -1,7 +1,6 @@
 package models;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import static controller.AdministradorController.buscarCpfPorNomeJson;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -152,23 +151,15 @@ public class Medico extends Usuarios {
     public static void criarReceitaPaciente(String nomePaciente,String medico ,String dia,String hora,JFrame frame) {
         String cpfPaciente = buscarCpfPorNomeJson(nomePaciente);
         if (cpfPaciente == null) {
-            JOptionPane.showMessageDialog(
-                    frame,
-                    "CPF do paciente não encontrado!",
-                    "Erro",
-                    JOptionPane.ERROR_MESSAGE
-            );
+            JOptionPane.showMessageDialog(frame,"CPF do paciente não encontrado!","Erro",JOptionPane.ERROR_MESSAGE);
             return;
         }
         String descricao = JOptionPane.showInputDialog(frame,"Digite a receita médica:");
-
         if (descricao == null || descricao.trim().isEmpty()) {
             JOptionPane.showMessageDialog(frame,"A receita não pode estar vazia!","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
         }
-        //String medico = buscarNomePorCpf(cpfPaciente);
         criarReceitaPacienteJson(nomePaciente, cpfPaciente,medico,dia, hora,descricao);
-
         JOptionPane.showMessageDialog(frame, "Receita criada com sucesso!","Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -177,14 +168,12 @@ public class Medico extends Usuarios {
         String cpfNormalizado = cpfPaciente.replaceAll("[^0-9]", "");
         String nomeArquivo = "receitas_" + cpfNormalizado + ".json";
         File arquivo = new File(nomeArquivo);
-
         Map<String, String> receita = new LinkedHashMap<>();
         receita.put("Paciente: ",nomePaciente);
         receita.put("medico", medico);
         receita.put("dia", dia);
         receita.put("hora", hora);
         receita.put("descricao", descricao);
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
             bw.write(gson.toJson(receita));
             bw.newLine();
@@ -204,7 +193,6 @@ public class Medico extends Usuarios {
         prontuario.put("dia", dia);
         prontuario.put("hora", hora);
         prontuario.put("observacao", observacao);
-
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo, true))) {
             bw.write(gson.toJson(prontuario));
             bw.newLine();
@@ -214,27 +202,18 @@ public class Medico extends Usuarios {
     }
     
     public static String buscarReceitasPaciente(String paciente) {
-
         Gson gson = new Gson();
         StringBuilder sb = new StringBuilder();
         String cpfPaciente = buscarCpfPacientePorNome(paciente);
         File arquivo = new File("receitas_" + normalizar(cpfPaciente) + ".json");
-
         if (!arquivo.exists()) {
             sb.append("Nenhuma receita encontrada.\n");
             return sb.toString();
         }
-
         try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-
-                Map<String, String> receita = gson.fromJson(
-                        linha,
-                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
-                        }.getType()
-                );
-
+                Map<String, String> receita = gson.fromJson(linha,new com.google.gson.reflect.TypeToken<Map<String, String>>() {}.getType());
                 sb.append("Dia: ").append(receita.get("dia")).append("\n");
                 sb.append("Hora: ").append(receita.get("hora")).append("\n");
                 sb.append("Descrição: ").append(receita.get("descricao")).append("\n");
@@ -248,32 +227,21 @@ public class Medico extends Usuarios {
     }
     
     public static String buscarProntuariosPaciente(String paciente, String medicoLogado) {
-
         Gson gson = new Gson();
         StringBuilder sb = new StringBuilder();
         String cpfPaciente = buscarCpfPacientePorNome(paciente);
         File arquivo = new File("prontuario_" + normalizar(cpfPaciente) + ".json");
-
         if (!arquivo.exists()) {
             sb.append("Nenhum prontuário encontrado.\n");
             return sb.toString();
         }
-
         try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
             String linha;
             while ((linha = br.readLine()) != null) {
-
-                Map<String, String> prontuario = gson.fromJson(
-                        linha,
-                        new com.google.gson.reflect.TypeToken<Map<String, String>>() {
-                        }.getType()
-                );
-
-                // 🔐 REGRA DE NEGÓCIO
+                Map<String, String> prontuario = gson.fromJson(linha,new com.google.gson.reflect.TypeToken<Map<String, String>>() {}.getType());
                 if (!prontuario.get("medico").equals(medicoLogado)) {
                     continue;
                 }
-
                 sb.append("Dia: ").append(prontuario.get("dia")).append("\n");
                 sb.append("Hora: ").append(prontuario.get("hora")).append("\n");
                 sb.append("Observação: ").append(prontuario.get("observacao")).append("\n");

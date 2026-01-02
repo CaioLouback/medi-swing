@@ -8,6 +8,7 @@ package view;
 import static controller.AdministradorController.listarUsuariosTabela;
 import static controller.AdministradorController.validarExclusao;
 import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,6 +31,8 @@ public class GerenciarCadastro extends javax.swing.JDialog {
         for (Object[] linha : dados) {
             model.addRow(linha);
         }
+         ImageIcon icon = new ImageIcon(getClass().getResource("/imagens/icon_logo.png"));
+        setIconImage(icon.getImage());
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,6 +50,7 @@ public class GerenciarCadastro extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Usuários Cadastrados");
 
         tabelaUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
