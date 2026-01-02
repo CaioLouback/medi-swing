@@ -57,7 +57,7 @@ public class AdministradorTela extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Médico", "Recepcionista", "Paciente", "Administrador" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Médico", "Recepcionista", "Paciente" }));
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
